@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>tast - 1. Duki Aleksey</title>
+</head>
+<body>
+
+<style>
+	section{
+		width: 100%;
+		max-width: 400px;
+		margin: 0 auto;
+		background-color: #f0f0f0;
+		padding: 50px;
+		text-align: center;
+	}
+	input{
+		width: 90%;
+		line-height: 2em;
+		font-size: 2em;
+	}
+</style>
+<section>
+	<p>Введите массив данных, через " , "</p>
+	<input type="text" class="form-control" name="row" id="row" value="9,4,7,2,9,3,5,8,7" placeholder="row"><br>
+
+	<p>Введите количество групп</p>
+	<input type="text" class="form-control" name="n" id="n" value="3" placeholder="Кол групп"><br/>
+
+	<button  onclick="groups()">Отправить</button>
+</section>
+
+
+	<script type="text/javascript">
+
+	function groups(){
+
+		// Groups
+		var N = document.getElementById('n').value;
+
+		// quantity in START array
+		//var A = document.getElementById('a').value;
+		var row = document.getElementById('row').value;
+		//var foo = parseInt(row);
+
+		console.log("row=%s",row);
+		
+		var foo = row.split(",").map(Number);
+
+		foo = foo.filter(function(number) {
+			return number > 0;
+		});
+		// Generate foo from 1 to 10
+		//var foo = Array.apply(null, {length: A}).map(Function.call, function(){return Math.floor(Math.random()*10+1)});
+
+		console.log("foo=%s",foo);
+
+		var A = foo.length;
+
+		document.write('Исходный массив - ', foo);
+		document.write("<br/><br/>");
+
+		foo = foo.sort(function(x, z) {
+		 	return z - x;
+		});
+
+		console.log(foo);	
+
+		//Sum all elements
+		var foototal = foo.reduce(function(x, z) {
+			return x + z;
+		});
+		var fooSubMax = foototal/N;
+		console.log("Среднее значение группы - %s",fooSubMax);
+
+		//Start loop
+		for (var n = 1 ; n <= N; n++) {	
+
+			var fooSub = [];
+			var fooSubSum = [];
+
+			if (fooSubMax < foo[0]) {
+				document.write("Попробуйте ввести меньшее количество групп :)<br><br>")
+			};
+
+			for ( var i = 0; i < A; i++) {
+
+				fooSubSum[n] = 0; 
+
+				if (fooSubSum[n] <= fooSubMax+2 && foo[i] != 0 ) { // проверка, если массив больше среднего числа, то ...
+
+					fooSub.push(foo[i]);
+
+					fooSubSum[n] = fooSub.reduce(function(pv, cv) { return pv + cv; }, 0);
+
+					console.info("1. %d - Добавили, %s - fooSubSum; N=%s; i=%s", foo[i],  fooSubSum[n], n, i);
+
+					saveEl = foo[i];
+
+					foo[i] = 0;				
+
+
+					if (fooSubSum[n] > fooSubMax && n!=N && i!=0 ) { // если значение превышает среднее
+						
+						var last_element = fooSub.length-1; // опредление длины массива
+
+						fooSub.splice(last_element,1); // удаление последнего элемента Массива
+
+						foo[i] = saveEl;
+
+						fooSubSum[n] = fooSub.reduce(function(pv, cv) { return pv + cv; }, 0); // проверка
+
+						console.warn("3. %s - last summ; i=%s; N=%s",fooSubSum[n], i,n);
+
+					};
+
+				};
+			
+			console.log("2. %s Summ after all loops, N=%s,i=%s",fooSubSum[n], n,i);
+			
+			}; //for - i		
+
+			document.write(fooSub);
+			document.write(" = ");
+			document.write(fooSubSum);
+			document.write("<br/>");
+
+
+		}; // for - n
+
+		console.log(foo);
+
+	};
+
+	</script>
+</body>
+</html>
